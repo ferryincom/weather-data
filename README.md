@@ -1,2 +1,2 @@
 # weather-data
-Wind, Rainfall, Waves, Air quality
+Wind, Rainfall, Temperature, Waves, Air quality
