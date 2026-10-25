@@ -1,30 +1,29 @@
 name: Update ECMWF Data
-
 on:
   schedule:
     - cron: '15 */3 * * *'
   workflow_dispatch:
-
+  push:
+    branches: [main]
 permissions:
   contents: write
-
+concurrency:
+  group: weather-publication
+  cancel-in-progress: false
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
-      - name: Run Converter
-        run: |
-          python convert.py
-
-      - name: Deploy to GitHub Pages branch
+      - name: Install GRIB tools
+        run: python -m pip install 'eccodes==2.50.0' 'numpy==2.5.4' 'requests==2.34.2'
+      - name: Run real converter
+        run: python convert.py
+      - name: Publish validated forecasts
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
