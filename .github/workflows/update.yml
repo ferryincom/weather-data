@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
       - name: Install GRIB tools
         run: python -m pip install 'eccodes==2.50.0' 'numpy==2.5.4' 'requests==2.34.2'
       - name: Run real converter
